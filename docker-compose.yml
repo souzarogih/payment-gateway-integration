@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  api:
+    container_name: payment-gateway-integration
+    build:
+#      dockerfile: Dockerfile-dev
+      context: .
+    ports:
+      - "5000:5000"
+    environment:
+      APP_PORT: 5000
+    #restart: always
+  db:
+    container_name: pay-gat-int-db
+    image: postgres:12-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: paygatint_user
+      POSTGRES_PASSWORD: paygatint_pwd
+      POSTGRES_DB: paygatint_pg_db
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+
